@@ -16,23 +16,27 @@ name.age
 <br>
 
 ## level1_2: this 키워드를 알아보자 1. 함수와 Object에서 사용하면?
-this의 뜻
-window
-자바스크립트 기본함수들을 갖고 있는 오브젝트
+- window는 모든 전역변수, 함수, DOM을 보관하고 관리하는 전역객체(global object)
+- 메소드는 오브젝트안의 함수
+- strict mode? 최상단에 'use strict' (E10 ↑)를 쓰면 JS를 엄격하게 제어
 
-
-strict mode? 최상단 'use strict'; (e10 ↑)
-JS를 엄격하게 제어
-strict mode에서는 this를 함수에 쓰면 undefined
-
-
-메소드안에서 this쓰면?
-> 메소드? 오브젝트안의 함수
-this 함수를 가지고 있는 오브젝트를 뜻함
-
-- window는 전역오브젝트(global object)
-
+<br>
 
 1. 그냥 쓰거나 함수 안에서 쓰면 this는 window를 뜻한다
+```javascript
+console.log(this) // window {어쩌구} 
+
+
+```
+
+
+
+
+> strict mode일 때 함수 안에서 쓰면 this는 undefined
+2. object에 있는 함수안의 this는 그 메소드의 주인을 뜻함
+
+** 결국 this는 오브젝트 내의 메소드(함수)에서 사용했을 때 메소드의 주인님 오브젝트를 출력해준다 
+
+
 
 
