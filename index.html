@@ -11,27 +11,21 @@
 </head>
 
 <body>
-
+    <button id="btn">버튼</button>
 
     <script>
-        // 'use strict';
+        function 기계(){
+            this.이름 = 'Kim';
+            this.나이 = 20;
+        }
 
-        console.log(this)
-        
-        function 함수() {
+        var 오브젝트 = new 기계();
+        console.log(오브젝트)
+
+        document.getElementById('btn').addEventListener('click', function(e){
             console.log(this)
-        }
-
-        함수()
-
-        var 오브젝트 = {
-            data: 'kim',
-            함수: function() {
-                console.log('안녕')
-            }
-        }
-
-        오브젝트.함수();
+            console.log(e.currentTarget)
+        });
     </script>
 </body>
 
