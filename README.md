@@ -65,8 +65,9 @@ var 오브젝트1 = {
 - 오브젝트1 > 오브젝트2의 this는 오브젝트1
 - 오브젝트1 > 오브젝트2 > 오브젝트3의 this는 오브젝트2
 
-
+<br><br>
 ***
+<br><br>
 
 
 ### 1-2. strict mode일 때 함수 안에서 쓰면 this는 undefined
