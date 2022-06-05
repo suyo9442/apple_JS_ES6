@@ -39,12 +39,12 @@ console.log(this)
 간지나는함수(); //window{}
 ```
 
-<br>***<br>
+<br><br>
 
 ### 1-2. strict mode일 때 함수 안에서 쓰면 this는 undefined
 - strict mode에선 var 키워드 없이 변수를 선언하거나, 변수를 arguments라는 이상한 키워드로 선언하거나 그런 실수를 방지해줌
 
-<br>***<br>
+<br><br>
 
 ### 2. object에 있는 함수안의 this는 그 메소드의 주인을 뜻함
 ```javascript
@@ -56,7 +56,8 @@ var 오브젝트1 = {
 오브젝트1.간지함수(); //{ data : 'Kim', 간지함수 : f } 
 ```
 
-<br>***<br>
+<br><br>
+
 
 ### 결론
 - 메소드안의 this는 메소드의 주인 오브젝트를 뜻한다 
@@ -65,5 +66,7 @@ var 오브젝트1 = {
 - 오브젝트1 > 오브젝트2 > 오브젝트3의 this는 오브젝트2
 
 
+***
 
 
+### 1-2. strict mode일 때 함수 안에서 쓰면 this는 undefined
