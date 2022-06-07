@@ -70,8 +70,20 @@
         Object.prototype
 
 
+
+        학생1.__proto__
+
+
+        // __proto__를 이용해 부모님 강제 등록하기
+        var 부모 = { name: 'kim' };
+        var 자식 = {};
+        자식.__proto__ = 부모;
+
+        console.log(자식.name) // kim
+
         
-        
+
+
     </script>
 </body>
 

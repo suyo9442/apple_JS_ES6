@@ -978,6 +978,52 @@ Object.prototype
 <br>
 
 ## level2_6: 객체지향3. prototype의 특징 몇가지
+- prototype은 **함수에서만** 생성됨
+- 일반 obj, arr엔 prototype이 없음
+> 일반 obj를 상속 하고 싶다면? constructor, Object.create(), class
+
+<br>
+
+### 내 부모님 유전자를 찾고 싶다면 __proto__
+- 해당 요소의 부모(유전자 요소)를 알고 싶다면__proto__
+- __proto__는 부모의 prototype를 의미함
+```javascript
+function 기계(){
+  this.name = 'Kim';
+  this.age = 15;
+}
+var 학생1 = new 기계();
+
+학생1.__proto__; // {gender: '남', constructor: ƒ}
+기계.prototype; // {gender: '남', constructor: ƒ} 
+```
+
+<br>
+
+### __proto__를 직접 등록하면 object끼리 상속기능을 구현 가능
+```javascript
+var 부모 = { name : 'Kim' };
+var 자식 = {};
+
+// 자식의 __proto__에 부모를 집어넣기
+자식.__proto__ = 부모;
+console.log(자식.name); // kim
+```
+
+<br>
+
+### 콘솔창에는 prototype 정보들이 항상 출력
+- 오브젝트 학생1 출력하면__proto__ 가 뜸
+- 여기서 부모인 기계.prototype의__proto__도 조회가능
+- 이렇게 쭉 부모의 부모까지~~ 계속 탐색 가능
+
+<br>
+
+#### 결론
+- 모든 object 자료형의 조상은 Object() 라는 기계이며 (일명 Object.prototype)
+- 모든 array 자료형의 조상도 Object()
+- 모든 함수 자료형의 조상도 Object()
+> 그래서 자바스크립트는 모든게 다 Object라고 말하는 것이다
 
 
 
