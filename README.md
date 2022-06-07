@@ -820,3 +820,166 @@ function 변경(obj) {
 변경(이름1) // 실행이X
 // 사실 변경(var obj == 이름)과 같은 명령
 ```
+
+<br>
+
+***
+
+<br>
+
+## level2_4: 객체지향1. Object 생성기계인 constructor를 만들어 써보자
+- 비슷한 obj를 여러개 복사하고 싶을 때
+- 관습적으로 대문자로 작명 (ex: Student)
+- **instance?** this.name = 'kim'
+
+<br>
+
+### 1-1. 기계 생성
+```javascript
+function Student기계1() {
+    this.name = 'kim'; // 새로 생성되는 obj에 값 부여
+    this.age = 15;
+
+    // 기계에 함수추가
+    this.sayHi = function () {
+        console.log('안녕하세요' + this.name + '입니다')
+    }
+}
+```
+
+<br>
+
+### 1-2. 기계로 obj 뽑기
+```javascript
+var 학생1 = new Student기계1();
+var 학생2 = new Student기계1();
+
+console.log(학생1) // Student기계1 {name: 'kim', age: 15, sayHi: ƒ}
+console.log(학생2) // Student기계1 {name: 'kim', age: 15, sayHi: ƒ
+
+// 기계의 함수 뽑기
+학생1.sayHi(); // 안녕하세요Kim입니다
+```
+
+<br>
+
+### 2-1. 파라미터 사용해서 가변 기계 생성
+```javascript
+function Student기계2(이름, 나이) {
+    this.name = 이름; // 파라미터로 가변적인 변수 생성
+    this.age = 나이
+
+    this.sayHi = function () {
+        console.log('안녕하세요' + this.name + '입니다')
+    }
+}
+```
+
+<br>
+
+### 2-2. 가변기계에서 서로 다른 자료를 가진 obj만들기
+```javascript
+// 파라미터 사용해서 서로 다른 자료의 obj만들기
+var 학생3 = new Student기계2('Lee', 18);
+
+console.log(학생3) // Student기계2 {name: 'Lee', age: 18, sayHi: ƒ}
+학생3.sayHi(); // 안녕하세요Lee입니다
+```
+
+<br>
+
+***
+
+<br>
+
+## level2_5: 객체지향2. 이거 보고 prototype 이해 못하면 강의 접습니다
+- **상속**  변수로 constructor가 가지고 있는 자료들로 obj를 만들 수 있잖아, 이런 과정을 '상속'받는다고 표현함 (부모 & 자식 관계)
+- **prototype** 상속을 구현할 수 있는 또 하나의 문법
+
+<br>
+
+### JS는 오브젝트에서 값을 출력할 때 이런 순서로 물어본다.
+1. 학생1에 직접 gender라는 값이 있는가?
+2. 그럼 부모 유전자에 gender라는 값이 있는?
+3. 그럼 부모의 부모 유전자에 gender라는 값이 있는가?
+4. 그럼 부모의 부모의 부모의 유전자에 .. 그게 있는가?
+
+<br>
+
+### 유전자 생성
+- prototype에 값을 추가하면 모든 자식들이 상속 받을 수 있다
+- JS에 유전자를 사용하는 과정
+<img src="prototype.png" width="400px">
+
+```javascript
+// 기계를 만들면 prototype이라는 공간이 자동으로 생성됨
+function 기계() {
+    this.name = 'Kim';
+    this.age = 15;
+}
+
+// prototype에 값을 추가하면 모든 자식들이 물려받기가 가능함
+기계.prototype.gender = '남' // key값 추가
+
+var 학생1 = new 기계();
+// 값을 물려받았기 때문에 '남'이 출력됨
+console.log(학생1.gender); // 남
+```
+
+<br>
+
+### prototype의 원리
+```javascript
+학생1.toString(); 
+```
+- obj와 arr에 붙일 수 있는 내장함수들.. 왜 쓸 수 있는걸까?
+- 학생1엔 toString이라는 자료가 없는데!?
+
+<br>
+
+- JS가 arr를 만드는 방식
+- arr 자료형을 만들면 자동으로 Array라는 부모(기계)가 가지고 있는 값들을 상속받을 수 있다
+```javascript
+// 우리 관점
+var arr = [1, 2, 3]; // arr자료는 Array 유전자를 상속받을 수 있음
+
+// JS 관점
+var arr = new Array(1, 2); 
+
+// 쓸 수 있는 내장함수들
+Array.prototype // [constructor: ƒ, concat: ƒ, copyWithin: ƒ,..
+```
+
+<br>
+
+#### object도 동일
+```javascript
+// 우리 관점
+var obj = { kim: 'kim' }; 
+
+// JS 관점
+var obj = new Object();
+
+// 쓸 수 있는 내장함수들
+Object.prototype
+```
+
+<br>
+
+#### 그럼 prototype으로 상속시키는거랑 constructor로 상속시키는거랑 차이가 뭐죠?
+- 자식들이 값을 직접 소유하게 만들고 싶으면 constructor로 상속시키자
+- 부모만 가지고 있고 그걸 참조해서 쓰게 만들고 싶으면 prototype으로 상속시키자
+- 보통은 상속할 수 있는 함수 같은 것들은 prototype으로 많이 만들어놓는다
+
+<br>
+
+***
+
+<br>
+
+## level2_6: 객체지향3. prototype의 특징 몇가지
+
+
+
+
+
