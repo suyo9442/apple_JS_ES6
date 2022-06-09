@@ -501,7 +501,7 @@ console.log(...어레이); // 'hello', 'world'
 ### 문자 하나씩 펼쳐줌
 ```javascript
 var 문자 = 'hello';
-console.log(문자); // 'hello
+console.log(문자); // 'hello'
 console.log(문자[0]); // h
 console.log(...문자); // h, e, l, l, o
 ```
@@ -1025,7 +1025,41 @@ console.log(자식.name); // kim
 - 모든 함수 자료형의 조상도 Object()
 > 그래서 자바스크립트는 모든게 다 Object라고 말하는 것이다
 
+<br>
 
+***
 
+<br>
 
+## level2_7: ES5방식으로 쉽게 구현하는 상속기능
+```javascript
+Object.create(물려받을 부모 obj);
+```
 
+<br>
+
+```javascript
+var 부모 = {
+    name: 'kim',
+    age: 50
+};
+
+// 자식에게 부모의 프로토타입을 물려줄게
+var 자식 = Object.create(부모);
+
+console.log(자식)
+// 값이 아닌 프로토타입을 물려받은거라 출력해도 아무것도 안뜸
+console.log(자식.name)
+// 내가 name을 갖고있나? (X) => 부모가 갖고있나? (O)
+
+자식.age = 20; // 실제값을 부여
+console.log(자식) // {age: 20}
+```
+
+<br>
+
+***
+
+<br>
+
+## level2_8: ES6방식으로 쉽게 구현하는 상속기능

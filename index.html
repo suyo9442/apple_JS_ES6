@@ -15,75 +15,27 @@
     <button id="버튼">버튼이에요</button>
 
     <script>
-        function 기계(이름, 나이) {
-            this.name = 이름; // 파라미터로 가변적인 변수 생성
-            this.age = 나이
+        // ES5
+        // Object.create();
 
-            this.sayHi = function () {
-                console.log('안녕하세요' + this.name + '입니다')
-            }
-        }
+        var 부모 = {
+            name: 'kim',
+            age: 50
+        };
 
-        var 학생1 = new 기계('Kim', 15);
-
-        // 기계를 만들면 prototype이라는 공간이 자동으로 생성됨
-        // prototype는 유전자
-        // prototype에 값을 추가하면 모든 자식들이 물려받기가 가능함
-        기계.prototype // {constructor: f}
-
-
-        기계.prototype.gender = '남' // key값 추가
+        var 자식 = Object.create(부모);
         
-        // 값을 물려받았기 때문에 '남'이 출력됨
-        console.log(학생1.gender) // 남
+        console.log(자식) 
+        // 값이 아닌, 프로토타입을 정의했기 때문에 출력해도 아무것도 안뜸
+        console.log(자식.name) 
+        // 내가 name을 갖고있나? (X) => 부모가 갖고있나? (O)
 
-
-        // 원리?
-        // 학생1을 출력하면 안나오는데 왜 .gender를 찍으면 나올까?
-        // 학생1.gender ==? 학생1에 gender가 없네? => 유전자에 gender가 있네? 순서로 동작
-
-        // obj, array에 붙여쓰면 글자로 바꿔주는 힘수
-        console.log([1, 2, 3].toString()) // 1, 2, 3
-        
-        
-        학생1.toString(); 
-        
-        // toString, sort, map 등 obj와 arr에 붙일 수 있는 내장함수.. 왜 쓸 수 있는걸까
-        // 학생1엔 toString이라는 자료가 없는데!?
-        // 학생1이 toString을 가지고 있는가? 그럼 부모유전자에 있는가? 그럼 부모유전자에 있는가?
-        // 결국 부모유전자에 toSting이 있기때문에 사용가능
-        
-        // arr를 만드는 같은 방식
-        // 모든 array자료형은 Array라는 부모를 이용해 만들어진다
-        // 때문에 toString, sort, map 등의 내장함수를 사용할 수 있는 것임
-        var arr = [1, 2, 3]; 
-        var arr = new Array(1, 2);
-
-        // 쓸 수 있는 내장함수들
-        // array 자료의 부모가 가지고 있는 유전자들
-        Array.prototype
-        
-        
-        // obj도 동일
-        var obj = { kim: 'kim' }; 
-        var obj = new Object();
-        Object.prototype
+        자식.age = 20; // 실제값을 부여
+        console.log(자식) // {age: 20}
 
 
 
-        학생1.__proto__
-
-
-        // __proto__를 이용해 부모님 강제 등록하기
-        var 부모 = { name: 'kim' };
-        var 자식 = {};
-        자식.__proto__ = 부모;
-
-        console.log(자식.name) // kim
-
-        
-
-
+        // arr.remove3();
     </script>
 </body>
 
