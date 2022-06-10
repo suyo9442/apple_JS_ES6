@@ -13,48 +13,67 @@
 <body>
 
     <button id="버튼">버튼이에요</button>
-
+    &nbsp;
     <script>
-        class 부모1 {
-            constructor() {
-                this.name = 'Kim';
+        // age를 꺼내오려면?
+        // 요즘은 사람.age하지 않고, 자료 꺼내는 함수를 만들어 씀
+        
+        var 사람 = {
+            name: 'Park',
+            age: 30,
+            // age를 꺼내는 함수
+            get nextAge1() {
+                // 지금 age에서 1을 더하는 함수
+                return this.age + 1
+            },
+            // age 변경 함수
+            set setAge1(나이) {
+                // 수정 시 => 숫자를 문자로 입력하는 실수 등을 방지할 수 있음
+                this.age = parseInt(나이);
             }
         }
 
-        // 뽑기
-        var 자식1 = new 부모1();
-        console.log(자식1) // 부모 {name: 'Kim'}
-
         
-        // 함수를 추가하고 싶으면?
-        class 부모2 {
+        // 장점? obj 자료가 복잡할 때, obj 자료 수정 시 좋음
+        
+        // 수정 시 => 숫자를 문자로 입력하는 실수 등을 방지할 수 있음
+        // 사람.setAge('20');
+        
+        // 지저분한 소괄호를 보기 싫다면?
+        // 함수 앞에 set을 미리 정의하면 직관적으로 뽑아올 수 있음
+        사람.setAge1 = '20'; //{name: 'Park', age: 20}
+        
+        // set은 데이터 변경하는 함수에, get은 데이터 꺼내쓰는 함수에
+        // getter는 꼭 return이 있어야함 (파라미터 입력X)
+        // setter는 꼭 파라미터 1개가 있어야함
+        // 사람.nextAge();
+        사람.nextAge1; // 21
+
+
+        // class에서 사용하는 get, set
+        class person {
             constructor() {
-                this.name = 'Kim';
-                // 방법1
-                // 자식이 직접 함수를 가짐
-                this.sayHi1 = function() { console.log('hello') }
+                this.name = 'Park';
+                this.age = 20;
             }
-            // 방법2
-            // 부모의 prototype에 추가됨
-            // 모든 자식들이 공용으로 쓸 수 있
-            sayHi2() {
-                console.log('hello')
+            // get
+            get nextAge2() {
+                return this.age + 1;
+            }
+            // set
+            set setAge2(나이) {
+                this.age = parseInt(나이);
             }
         }
-        
-        var 자식2 = new 부모2();
 
-        부모2.prototype // {constructor: ƒ, sayHi2: ƒ}
-        자식2.__proto__ // 부모유전자 출력1
-        Object.getPrototypeOf(자식2) // 부모유전자 출력2
+        var 사람1 = new person();
+        사람1.nextAge2;
+        사람1.setAge2 = 20;
 
 
-        //프로토타입 추가
-        부모2.prototype.sayHello = function(){}
+        // 무결점 함수를 만들기 위해
 
 
-        // 객체지향 문법은 왜쓰냐면?
-        // 1. object 여러개 만들어 쓰기 위해
     </script>
 </body>
 
