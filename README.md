@@ -1105,9 +1105,9 @@ class 부모2 {
 
 <br>
 
-- 부모 유전자 출력하기👉 `.prototype`
-- 자식으로 부모 유전자 출력하기👉 `__proto__`
-- 자식으로 부모 유전자 출력하기👉 `Object.getPrototypeOf()`
+- 부모 유전자 출력하기👉 &nbsp; `.prototype`
+- 자식으로 부모 유전자 출력하기👉 &nbsp;`__proto__`
+- 자식으로 부모 유전자 출력하기👉 &nbsp;`Object.getPrototypeOf()`
 
 ```javascript
 var 자식2 = new 부모2();
