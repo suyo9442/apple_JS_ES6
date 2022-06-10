@@ -1062,4 +1062,72 @@ console.log(자식) // {age: 20}
 
 <br>
 
-## level2_8: ES6방식으로 쉽게 구현하는 상속기능
+## level2_8: ES6방식으로 안쉽게 구현하는 상속기능 (class)
+- ES6 버전의 constructor 만드는 기능
+- 객체지향 문법의 기초적인 문법 class
+- 객체지향 문법은 왜쓰냐면? *object 여러개 만들어 쓰기 위해*
+
+<br>
+
+### class 기본문법
+```javascript
+class 부모1 {
+    constructor() {
+        this.name = 'Kim';
+    }
+}
+
+// obj만들고 뽑기
+var 자식 = new 부모1();
+console.log(자식) // 부모 {name: 'Kim'}
+```
+
+<br>
+
+### class에 함수를 추가하고 싶으면?
+- 방법1: 자식이 직접 함수를 가짐
+- 방법2: 부모의 prototype에 추가됨
+    > 모든 자식들이 공용으로 쓸 수 있음
+
+```javascript
+class 부모2 {
+    constructor() {
+        this.name = 'Kim';
+        // 방법1
+        this.sayHi1 = function() { console.log('hello') }
+    }
+    // 방법2
+    sayHi2() {
+        console.log('hello')
+    }
+}
+```
+
+<br>
+
+- 부모 유전자 출력하기👉 `.prototype`
+- 자식으로 부모 유전자 출력하기👉 `__proto__`
+- 자식으로 부모 유전자 출력하기👉 `Object.getPrototypeOf()`
+
+```javascript
+var 자식2 = new 부모2();
+
+// 부모 유전자 확인
+부모2.prototype
+
+// 자식의 부모 유전자 확인
+자식2.__proto__
+
+// 자식의 부모 유전자 확인
+Object.getPrototypeOf(자식2)
+```
+
+<br>
+
+### 프로토타입 추가
+- 함수 만드는 방법2에 직접 추가하거나
+- 밖에서 prototype으로 만들기
+
+```javascript
+부모2.prototype.sayHello = function(){}
+```

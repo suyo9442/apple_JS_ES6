@@ -15,27 +15,46 @@
     <button id="버튼">버튼이에요</button>
 
     <script>
-        // ES5
-        // Object.create();
+        class 부모1 {
+            constructor() {
+                this.name = 'Kim';
+            }
+        }
 
-        var 부모 = {
-            name: 'kim',
-            age: 50
-        };
+        // 뽑기
+        var 자식1 = new 부모1();
+        console.log(자식1) // 부모 {name: 'Kim'}
 
-        var 자식 = Object.create(부모);
         
-        console.log(자식) 
-        // 값이 아닌, 프로토타입을 정의했기 때문에 출력해도 아무것도 안뜸
-        console.log(자식.name) 
-        // 내가 name을 갖고있나? (X) => 부모가 갖고있나? (O)
+        // 함수를 추가하고 싶으면?
+        class 부모2 {
+            constructor() {
+                this.name = 'Kim';
+                // 방법1
+                // 자식이 직접 함수를 가짐
+                this.sayHi1 = function() { console.log('hello') }
+            }
+            // 방법2
+            // 부모의 prototype에 추가됨
+            // 모든 자식들이 공용으로 쓸 수 있
+            sayHi2() {
+                console.log('hello')
+            }
+        }
+        
+        var 자식2 = new 부모2();
 
-        자식.age = 20; // 실제값을 부여
-        console.log(자식) // {age: 20}
+        부모2.prototype // {constructor: ƒ, sayHi2: ƒ}
+        자식2.__proto__ // 부모유전자 출력1
+        Object.getPrototypeOf(자식2) // 부모유전자 출력2
 
 
+        //프로토타입 추가
+        부모2.prototype.sayHello = function(){}
 
-        // arr.remove3();
+
+        // 객체지향 문법은 왜쓰냐면?
+        // 1. object 여러개 만들어 쓰기 위해
     </script>
 </body>
 
