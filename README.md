@@ -1522,3 +1522,298 @@ console.log(data.getter함수)
 <br>
 
 ## level2_12: 틀린그림 찾기능력이 향상되는 Destructuring 문법
+- 변수명을 바꾸려면 👉 `var { name: 이름}`
+- 디폴트 파라미터는 👉 `var {name: 이름, 나이 = 30}`
+
+<br>
+
+### arr자료를 하나씩 담으려면?
+- 모양에 맞춰 변수를 선언하면 변수를 생성할 수 있음
+```javascript
+var arr = [2, 3, 4];
+
+// 이렇게 해도 되지만
+var a = arr[0]
+var b = arr[1]
+
+// 모양에 맞춰 변수를 선언하면 변수를 생성할 수 있음
+var [a,b,c] = [2, 3, 4]
+console.log(a, b, c) // 2, 3, 4
+```
+
+<br>
+
+- 선언과 할당이 모양이 다르다면 디폴트 파라미터 👉 `c = 10`
+```javascript
+var [a,b,c = 10] = [2, 3]
+console.log(c) //10
+```
+
+<br>
+
+### obj자료를 하나씩 담으려면?
+- 변수명과 key명을 동일하게 써야함
+```javascript
+var obj = { name: 'Kim', age: 30 };
+
+// 이렇게 해도 되지만
+var name = obj.name;
+var age = obj.age;
+
+// 변수명과 key명을 동일하게 써야함
+var { name, age} = { name: 'Kim', age: 30 };
+```
+
+<br>
+
+- 디폴트 파라미터는?
+```javascript
+var { name, age = 30} = { name: 'Kim' };
+console.log(age) // 30
+```
+
+<br>
+
+- 변수명을 바꾸려면?
+```javascript
+var { name: 이름, age = 31 } = { name: 'Kim' }
+console.log(이름) // Kim 
+```
+
+<br>
+
+
+### 반대로 변수들을 obj에 집어넣고 싶으면
+- `key명: 변수명`
+
+```javascript
+var name = 'Kim'
+var age = 30
+
+// name이라는 key에는 name의 value를
+var obj = {name: name, age: age}
+```
+
+<br>
+
+- ES6부터 축약해서 쓸 수 있게됨
+> key명과 변수명이 같다면
+```javascript
+// var obj = {name: name, age: age}
+var obj = { name, age}
+```
+
+<br>
+
+### 함수 파라미터를 만들 떄도 사용
+- obj 데이터를 파라미터로 만들고 싶다면?
+```javascript
+// obj의 key값을 파라미터로 사용
+function 함수( {name, age} ) {
+    console.log(name) // Kim
+    console.log(age)  // 31
+}
+
+// key값에 value 설정
+함수({ name: 'Kim', age: 30 }) // Kim, 30
+```
+
+<br>
+
+- arr 데이터를 파라미터로 만들고 싶다면?
+> 함수를 실행할 때 괄호 넣어야함❗
+```javascript
+function 함수( [a, b] ) {
+    console.log(a);
+    console.log(b);
+}
+
+// 함수를 실행할 때 괄호 넣어야함
+함수([1, 2]); // 1, 2
+```
+
+<br>
+
+### Destructuring 연습문제
+1️⃣ a와 address와 number라는 변수는 각각 무슨 값을 가지고 있을까요? 
+```javascript
+var [number, address] = [ 30, 'seoul' ];
+var {address : a , number = 20 } = { address, number };
+```
+- 내 답안
+    - a: seoul
+    - address: seoul
+    - number: 30
+    > number는 값이 설정이 되있어서 디폴트값이 필요없기때문!
+
+<br>
+
+2️⃣ 다음과 같은 Object에서 데이터를 뽑아서 변수를 만들고 싶습니다.
+- 키, 몸무게, 상의사이즈, 하의사이즈 정보를 각각 뽑아서 4개의 변수를 만들고 싶습니다.
+```javascript
+let 신체정보 = {
+  body: {
+    height: 190,
+    weight: 70
+  },
+  size: ["상의 Large", "바지 30인치"],
+};
+```
+
+<br>
+
+- 선생님 답안
+> 데이터가 얼마나 복잡하든간에 `좌우 형태를 똑같이 맞추면` destructuring 문법으로 변수를 만들 수 있습니다.
+```javascript
+let { body: {height, weight}, size: [상의, 하의] } = 신체정보;
+console.log(height) // 190
+console.log(weight) // 70
+console.log(상의)   // 상의 Large
+console.log(하의)   // 바지 30인치
+```
+
+<br>
+
+***
+
+<br>
+
+## level2_13: import / export 를 이용한 파일간 모듈식 개발
+- 리액트, 뷰 사용할 때 자주 쓰는 문법
+- **IE에선 안됨**, 보통은 `<script src="">` 쓰자❗
+
+<br>
+
+### 하나만 내보내는 export default 문법
+- 파일당 `1회만` 사용할 수 있음
+- import `작명은자유` from 경로
+
+<br>
+
+- export(library.js)
+```javascript
+var a = 10;
+
+// 파일당 1회만 사용
+export default a;
+```
+
+<br>
+
+- import(index.html)
+```javascript
+import 임포트한것 from '/library.js';
+```
+
+<br>
+
+### 여러개 내보내는 export {} 문법
+- import 할 때 `동일한 변수명`을 써줘야함
+
+<br>
+
+- export(library.js)
+```javascript
+var a = 10;
+var b = 20;
+var c = 30;
+
+// 여러개 export할 때 사용
+export { b, c };
+```
+
+<br>
+
+- import(index.html)
+```javascript
+import {b, c} from '/library.js';
+```
+
+<br>
+
+### export default와 export는 동시에 사용할 수 있음
+- export(library.js)
+```javascript
+var a = 10;
+var b = 20;
+var c = 30;
+
+export default a;
+export { b, c };
+```
+
+<br>
+
+- import(index.html)
+```javascript
+import a, {b, c} from '/library.js';
+```
+
+<br>
+
+### import할 변수 이름을 바꾸려면?
+```javascript
+import a as 변경a, {b as 변경b} from '/library.js';
+```
+
+<br>
+
+### import할 때 변수들이 너무 많으면 *
+- *로 import해온 것들은 별명을 꼭 지어줘야함
+- export default한 건 *이 적용되지 X
+
+<br>
+
+```javascript
+// *로 import해온 것들은 별명을 꼭 지어줘야함
+import * as 별명 from '/library.js';
+
+// export default한 건 *이 적용되지 X
+import 디폴트한c, * as 별명 from '/library.js';
+```
+
+<br>
+
+### 옛날 방식
+```javascript
+
+// export 하는 js파일
+module.exports.a = 10 ;
+
+------------------------
+
+// import 하는 js파일
+var 가져온거 = require('/library.js'); 
+
+```
+
+<br>
+
+***
+
+<br>
+
+## level2_14: Stack, Queue를 이용한 웹브라우저 동작원리
+```javascript
+// 1빠
+console.log(1+1)
+
+// 3빠, 맨마지막에 실행
+setTimeout(function(){ console.log(2+2) }, 1000)
+
+// 2빠
+console.log(3+3)
+```
+- 브라우저가 자바스크립트 코드를 실행시킬 때 과정
+    - 동기처리: stack => 실행
+    - 비동기처리: stack => 대기실 => queue => 실행
+
+- 비동기처리가 되는 요소들
+    - ajax요청, 이벤트리스너, setTimeout 등
+
+- 주의점?
+    - stack을 바쁘게 만들면 비동기처리 요소들이 실행이 불가능할 수도 있음
+    
+- stack을 바쁘지 않도록 하는 트릭?
+    - 1. setTimeout을 이용하는 것입니다.
+    - 2. Web worker를 이용합니다.

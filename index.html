@@ -14,34 +14,11 @@
 
 
     <script>
-        var data = {
-            odd: [],
-            even: [],
-            // set
-            setter함수: function(...숫자들){
-                // '...숫자들'은 arr니까 forEachㄹ
-                숫자들.forEach((a) => {
-                    if(a % 2 == 0) {
-                        this.even.push(a)
-                    } else {
-                        this.odd.push(a)
-                    }
-                })
-            },
+        var myWorker = new Worker('library.js'); 
 
-            // get
-            get getter함수() {
-                return [...this.odd, ...this.even].sort()
-            }
-        }
-
-        // set 확인
-        data.setter함수(4, 5, 1, 2)
-        console.log(data)
-        
-        // get 확인
-        console.log(data.getter함수)
-
+w.onmessage = function(e){
+  console.log(e.data) //이러면 1 나올듯
+};
     </script>
 </body>
 
