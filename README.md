@@ -1139,12 +1139,13 @@ Object.getPrototypeOf(자식2)
 <br>
 
 ## level2_9: 객체지향5. class를 복사하는 extends / super
-- extends: class 복사하기(=상속하기)
-    > class안에 값이 많으면 힘드니까 extends로 복사해서 쓰기!
+- **extends**: class 복사하기(=상속하기)
+    > class안에 값이 많아지면 힘드니까 extends로 복사해서 쓰기!
 
 <br>
 
 ### extend문법
+- 할아버지라는 부모 class가 있고
 ```javascript
 class 할아버지{
     constructor(name) {
@@ -1202,7 +1203,7 @@ class 아버지 extends 할아버지 {
         console.log('안녕 저는 아버지에요')
 
         // 할아버지 함수 갖다 쓰기
-        super.sayHi();
+        super.sayHi(); // 안녕 저는 할아버지에요
     }
 }
 ```
@@ -1232,11 +1233,11 @@ class 아버지 extends 할아버지 {
 var 사람 = {
     name: 'Park',
     age: 30,
-    // age를 꺼내는 함수
+    // age를 꺼내쓰는 함수
     get nextAge1() {
         return this.age + 1
     },
-    // age 변경 함수
+    // age 변경하는 함수
     set setAge1(나이) {
         // 수정 시 숫자를 문자로 입력하는 실수 등을 방지할 수 있음
         this.age = parseInt(나이);
@@ -1282,3 +1283,242 @@ var 사람1 = new person();
 사람1.nextAge2;
 사람1.setAge2 = 20;
 ```
+
+<br>
+
+***
+
+<br>
+
+## level2_11: class, extends, getter, setter 연습문제 5개
+### 직접 class 구조 만들어보기
+- class를 만들어 강아지 오브젝트들을 뽑고 싶다면?
+```javascript
+var 강아지1 = { type : '말티즈', color : 'white' };
+var 강아지2 = { type : '진돗개', color : 'brown' }; 
+```
+
+<br>
+
+- 내 답안
+```javascript
+// class 만들기
+class 강아지만들기 {
+    constructor(종류, 색상) {
+        this.type = 종류;
+        this.color = 색상;
+    }
+}
+
+// class로 obj 만들기
+var 강아지1 = new 강아지만들기('말티즈', 'white');
+var 강아지2 = new 강아지만들기('진돗개', 'brown');
+
+// 확인
+console.log(강아지1);
+console.log(강아지2);
+```
+
+<br>
+
+### 이번엔 고양이관련 object들을 만들고 싶습니다. 
+- 고양이엔 age라는 속성을 하나 더 추가하고 싶습니다. 어떻게 class를 만들면 될까요? (type, color는 강아지 object와 유사)
+
+<br>
+
+- 내 답안
+```javascript
+class 고양이만들기 extends 강아지만들기 {
+    constructor(종류, 색상, 나이) {
+        super(종류, 색상);
+
+        this.age = 나이;
+    }
+}
+
+var 고양이1 = new 고양이만들기('러시안블루', 'grey', 4)
+console.log(고양이1);
+```
+
+<br>
+
+### 고양이와 강아지 object들에 기능을 하나 추가하고 싶습니다. 
+- 모든 고양이와 강아지 object들은 .한살먹기() 라는 함수를 사용할 수 있습니다. 
+
+    1️⃣ 한살먹기 함수는 강아지 class로부터 생성된 오브젝트가 사용하면 콘솔창에 에러를 출력해주어야합니다. 
+
+    2️⃣ 한살먹기 함수는 고양이 class로 부터 생성된 오브젝트가 사용하면 현재 가지고있는 age 속성에 1을 더해주는 기능을 실행해야합니다.
+
+한살먹기 함수는 어떻게 만들면 좋을까요? 
+
+<br>
+
+- 내 답안
+```javascript
+class 강아지만들기 {
+    constructor(종류, 색상) {
+        this.type = 종류;
+        this.color = 색상;
+    }
+
+    // 강아지 함수 만들기
+    한살먹기() {
+        console.log('에러')
+    }
+}
+
+class 고양이만들기 extends 강아지만들기 {
+    constructor(종류, 색상, 나이) {
+        super(종류, 색상);
+
+        this.age = 나이;
+    }
+    // 고양이 함수 만들기
+    한살먹기() {
+        return this.age + 1;
+
+        // 강아지 함수 갖다 쓰기
+        super.한살먹기();
+    }
+}
+
+// 확인
+console.log(고양이1.한살먹기()); //5
+강아지1.한살먹기(); //에러
+```
+
+<br>
+
+- 선생님 답안
+    - 에러가 '에러'가 아니고 리얼 에러라는 거ㅋㅋㅋ
+    - class a가 b로 부터 생성된 오브젝트인지 아닌지 true/false로 알려주는 연산자 **instanceof**
+``` javascript
+class 강아지만들기 {
+    constructor(종류, 색상) {
+        this.type = 종류;
+        this.color = 색상;
+    }
+
+    // 고양이, 강아지 둘다 사용하는 함수 만들기
+    한살먹기() {
+        // 고양이 instance만 실행하도록
+        if (this instanceof 고양이만들기) {
+            this.age++
+        }
+    }
+}
+
+class 고양이만들기 extends 강아지만들기 {
+    constructor(종류, 색상, 나이) {
+        super(종류, 색상);
+        this.age = 나이;
+    }
+}
+
+var 고양이 = new 고양이만들기('러시안블루', 'grey', 4);
+var 강아지 = new 강아지만들기('진돗개', 'brown', 4);
+고양이.한살먹기()
+강아지.한살먹기()
+console.log(고양이) // age: 5
+console.log(강아지) // 실행X
+```
+
+<br>
+
+### 4. get/set을 이용해봅시다
+- class 이름은 unit
+    1️⃣ 기본 속성: 공격력5, 체력100
+    2️⃣ 전투력측정해주는 getter 함수 (공격력+체력)
+    3️⃣ 체력 속성이 50 증가하는 setter 함수
+    > 인스턴스는 class로부터 새로생성되는 오브젝트
+
+<br>
+
+- 내 답안
+```javascript
+class unit {
+    constructor() {
+        this.공격력 = 5;
+        this.체력 = 100;
+    }
+    get battlePoint() {
+        return this.공격력 + this.체력;
+    }
+    set heal(증가수) {
+        this.체력 = this.체력 + 증가수;
+    }
+}
+
+var 인스턴스 = new unit();
+
+// get 확인
+console.log(인스턴스.battlePoint);
+
+// set 확인
+인스턴스.heal = 50;
+console.log(인스턴스);
+```
+
+<br>
+
+### 5. get/set을 이용해봅시다2
+- 다음과 같은 오브젝트가 있음
+```javascript
+var data = {
+  odd : [],
+  even : []
+}
+```
+1️⃣ data 오브젝트안에 setter 역할 함수를 하나 만들어보십시오.
+- setter 함수에 1,2,3,4 이렇게 아무 자연수나 파라미터로 입력하면 홀수는 odd, 짝수는 even 이라는 속성에 array 형태로 저장되어야합니다.   
+
+2️⃣ data 오브젝트안에 getter 역할 함수를 하나 만들어보십시오.
+- getter 함수를 사용하면 odd, even에 저장된 모든 데이터들이 숫자순으로 정렬되어 출력되어야합니다. 
+
+> 예를 들면,
+<br>
+data.setter함수(1,2,3,4,5) 이렇게 입력하면 
+<br>
+data = { odd : [1,3,5], even : [2,4] }
+<br>
+이렇게 저장이 되어야합니다. 
+
+<br>
+
+```javascript
+var data = {
+    odd: [],
+    even: [],
+    // set
+    setter함수: function(...숫자들){
+        // '...숫자들'은 arr니까 forEach
+        숫자들.forEach((a) => {
+            if(a % 2 == 0) {
+                this.even.push(a)
+            } else {
+                this.odd.push(a)
+            }
+        })
+    },
+
+    // get
+    get getter함수() {
+        return [...this.odd, ...this.even].sort()
+    }
+}
+
+// set 확인
+data.setter함수(4, 5, 1, 2)
+console.log(data)
+
+// get 확인
+console.log(data.getter함수)
+```
+
+<br>
+
+***
+
+<br>
+
+## level2_12: 틀린그림 찾기능력이 향상되는 Destructuring 문법

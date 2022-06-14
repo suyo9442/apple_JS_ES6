@@ -12,67 +12,35 @@
 
 <body>
 
-    <button id="버튼">버튼이에요</button>
-    &nbsp;
+
     <script>
-        // age를 꺼내오려면?
-        // 요즘은 사람.age하지 않고, 자료 꺼내는 함수를 만들어 씀
-        
-        var 사람 = {
-            name: 'Park',
-            age: 30,
-            // age를 꺼내는 함수
-            get nextAge1() {
-                // 지금 age에서 1을 더하는 함수
-                return this.age + 1
-            },
-            // age 변경 함수
-            set setAge1(나이) {
-                // 수정 시 => 숫자를 문자로 입력하는 실수 등을 방지할 수 있음
-                this.age = parseInt(나이);
-            }
-        }
-
-        
-        // 장점? obj 자료가 복잡할 때, obj 자료 수정 시 좋음
-        
-        // 수정 시 => 숫자를 문자로 입력하는 실수 등을 방지할 수 있음
-        // 사람.setAge('20');
-        
-        // 지저분한 소괄호를 보기 싫다면?
-        // 함수 앞에 set을 미리 정의하면 직관적으로 뽑아올 수 있음
-        사람.setAge1 = '20'; //{name: 'Park', age: 20}
-        
-        // set은 데이터 변경하는 함수에, get은 데이터 꺼내쓰는 함수에
-        // getter는 꼭 return이 있어야함 (파라미터 입력X)
-        // setter는 꼭 파라미터 1개가 있어야함
-        // 사람.nextAge();
-        사람.nextAge1; // 21
-
-
-        // class에서 사용하는 get, set
-        class person {
-            constructor() {
-                this.name = 'Park';
-                this.age = 20;
-            }
-            // get
-            get nextAge2() {
-                return this.age + 1;
-            }
+        var data = {
+            odd: [],
+            even: [],
             // set
-            set setAge2(나이) {
-                this.age = parseInt(나이);
+            setter함수: function(...숫자들){
+                // '...숫자들'은 arr니까 forEachㄹ
+                숫자들.forEach((a) => {
+                    if(a % 2 == 0) {
+                        this.even.push(a)
+                    } else {
+                        this.odd.push(a)
+                    }
+                })
+            },
+
+            // get
+            get getter함수() {
+                return [...this.odd, ...this.even].sort()
             }
         }
 
-        var 사람1 = new person();
-        사람1.nextAge2;
-        사람1.setAge2 = 20;
-
-
-        // 무결점 함수를 만들기 위해
-
+        // set 확인
+        data.setter함수(4, 5, 1, 2)
+        console.log(data)
+        
+        // get 확인
+        console.log(data.getter함수)
 
     </script>
 </body>
