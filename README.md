@@ -1521,7 +1521,7 @@ console.log(data.getter함수)
 
 <br>
 
-## level2_12: 틀린그림 찾기능력이 향상되는 Destructuring 문법
+## level3_1: 틀린그림 찾기능력이 향상되는 Destructuring 문법
 - 변수명을 바꾸려면 👉 `var { name: 이름}`
 - 디폴트 파라미터는 👉 `var {name: 이름, 나이 = 30}`
 
@@ -1678,7 +1678,7 @@ console.log(하의)   // 바지 30인치
 
 <br>
 
-## level2_13: import / export 를 이용한 파일간 모듈식 개발
+## level3_2: import / export 를 이용한 파일간 모듈식 개발
 - 리액트, 뷰 사용할 때 자주 쓰는 문법
 - **IE에선 안됨**, 보통은 `<script src="">` 쓰자❗
 
@@ -1793,7 +1793,7 @@ var 가져온거 = require('/library.js');
 
 <br>
 
-## level2_14: Stack, Queue를 이용한 웹브라우저 동작원리
+## level3_3: Stack, Queue를 이용한 웹브라우저 동작원리
 ```javascript
 // 1빠
 console.log(1+1)
@@ -1804,6 +1804,7 @@ setTimeout(function(){ console.log(2+2) }, 1000)
 // 2빠
 console.log(3+3)
 ```
+
 - 브라우저가 자바스크립트 코드를 실행시킬 때 과정
     - 동기처리: stack => 실행
     - 비동기처리: stack => 대기실 => queue => 실행
@@ -1817,3 +1818,502 @@ console.log(3+3)
 - stack을 바쁘지 않도록 하는 트릭?
     - 1. setTimeout을 이용하는 것입니다.
     - 2. Web worker를 이용합니다.
+
+<br>
+
+***
+
+<br>
+
+## level3_4: 동기/비동기처리와 콜백함수라는 용어 깔끔하게 정리
+- 자바스크립트는 기본적으로 `동기식 처리`
+- **동기식?** 한번에 코드 한줄씩 차례로 실행
+- **비동기식?** 오래걸리는 작업이 있으면 제껴두고 다른 것 부터 처리하는 방식 (Web API 에 잠시 보관)
+
+<br>
+
+- 순차적으로 실행시키기 위해선 👉 콜백함수를 사용 
+- 콜백함수? 함수 안에 들어가는 함수
+```javascript
+function 첫째함수() {
+    console.log(1);
+}
+
+function 둘째함수() {
+    console.log(2);
+}
+
+첫째함수();
+둘째함수();
+```
+> 오래걸리는 것은 제껴두기 때문에 순차대로 실행되지 않을 수 있음
+
+<br>
+
+- 순차적으로 실행시키려면 👉 파라미터를 사용해서 순차적으로 실행되도록 할 수 있음
+```javascript
+function 첫째함수(구멍) {
+    console.log(1);
+    구멍();
+}
+
+function 둘째함수() {
+    console.log(2);
+}
+
+첫째함수(둘째함수);
+```
+> 비동기와는 관련X => 비동기 처리는 setTimeout, addEventListener 등으로
+
+<br>
+
+- 순차적으로 실행시키기 위해 콜백함수를 사용하면 👉 복잡해지는 문제점 생김🚫
+```javascript
+첫째함수(function(){
+    둘째함수(function(){
+        셋째함수(function(){
+
+        })
+    })
+})
+```
+> 순차적 실행을 더 쉽게 쓰기위한 **Promise패턴**
+
+<br>
+
+***
+
+<br>
+
+## level3_5: 인간의 언어로 설명하는 ES6 Promise
+- 순차적 실행을 위해 콜백함수 대신 쓸 수 있는 Promise 
+- Promise는 성공/실패를 판정하는 기계
+- Promise는 동기를 비동기로 바꿔주는 마법의 문법이 아님
+- **비동기와 괸련X**, 콜백함수 디자인의 대체문법임
+- 콜백함수 디자인을 할 떄, 복잡해지는 코드의 문제를 해결하기 위해 씀
+
+<br>
+
+### Promise 기본문법
+- 성공/실패 판정 Promise 디자인 하는법
+- 성공 시 실행 👉 then
+- 실패 시 실행 👉 catch
+
+```javascript
+var 프로미스 = new Promise(function(resolve, reject){
+    resolve(); // 성공 시 실행 => then
+    reject();  // 실패 시 실행 => catch
+});
+
+// 프로미스가 성공일 경우 실행할 코드
+프로미스.then(function(){
+
+}).then(function(){
+
+}).catch(function(){ //실패할 경우 실행
+
+}).finally(function(){ // 성공or실패든 뭔가 일어났을 때 실행
+
+})
+```
+
+<br>
+
+### Promise 예시1
+- 파라미터를 사용해서 성공/판정할 때의 결과값을 특정코드에서 실행할 수 있음
+> 파라미터 전달하는 방식에 유의❗
+
+```javascript
+var 프로미스 = new Promise(function(resolve, reject){
+    // 연산이 끝나면 성공() 판정을 해주세요~
+    var 어려운연산 = 1 + 1;
+    resolve(어려운연산);
+});
+
+프로미스.then(function(결과){
+    console.log(결과) // 2
+}).catch(function(){
+    console.log('실패했어요')
+})
+```
+
+<br>
+
+### Promise 예시2
+- Promise 안에 10초 걸리는 어려운 연산을 시키면 10초동안 브라우저가 멈춤, 10초 걸리는 연산을 해결될 때 까지 대기실에 제껴두고 그런거 아님
+> 원래 자바스크립트는 평상시엔 동기적으로 실행이 되며 비동기 실행을 지원하는 특수한 함수들 덕분에 가끔 비동기적 실행이 될 뿐
+
+```javascript
+var 프로미스 = new Promise(function(resolve, reject){
+    // 1초후에 성공 판정을 해주는 Promise
+    setTimeout(function(){
+        성공();
+    }, 1000)
+});
+
+// 성공 시 실행될 코드
+프로미스.then(function(){
+    console.log('성공했어요');
+})
+```
+
+<br>
+
+### Promise는 3가지 상태가 존재
+- 성공하면 👉 `Promise {<resolved>}`
+- 판정 대기중이면 👉 `Promise {<pending>}`
+- 실패하면 👉 `Promise {<rejected>}`
+> 콘솔창에 Promise를 확인하는 것만으로 판정 결과를 확인 가능
+
+<br>
+
+### Promise가 적용된 함수들
+- jQuery.ajax().done()
+- fetch().then().catch()
+
+<br>
+
+***
+
+<br>
+
+## level3_6: ES6 Promise 간단 연습문제 & 해설
+### 1️⃣ 이미지 로딩 성공시 특정 코드를 실행하고 싶습니다.
+
+- 이미지가 로드가 되면 콘솔창에 성공, 로드가 실패하면 콘솔창에 실패를 출력
+
+```html
+<img id="test" src="https://codingapple1.github.io/kona.jpg"> 
+``` 
+
+<br>
+
+- 내 답안
+```javascript
+var 이미지 = document.getElementById('test');
+
+var 프로미스 = new Promise(function(성공, 실패){
+    // 이미지 로드 성공 => 성공코드 실행
+    이미지.addEventListener('load', function(){
+        성공();
+    })
+    // 이미지 로드 실패 => 실패코드 실행
+    이미지.addEventListener('error', function(){
+        실패();
+    })
+});
+
+프로미스.then(function(){ // 성공코드
+    console.log('성공');
+}).catch(function(){ // 실패코드
+    console.log('실패');
+})
+```
+
+<br>
+
+### 2️⃣ Ajax 요청이 성공하면 무언가 코드를 실행하고 싶습니다. 
+- GET 요청을 해서 성공하면 Promise의 then 함수를 이용해서 Ajax로 받아온 인삿말을 콘솔창에 출력해주고 싶습니다.
+
+<br>
+
+- 내 답안
+```javascript
+var 프로미스 = new Promise(function (성공, 실패) {
+    $.ajax({
+        type: 'GET',
+        url: 'https://codingapple1.github.io/hello.txt'
+    }).done(function(결과) {
+        성공(결과)
+    })
+})
+
+프로미스.then(function(결과){
+    console.log(결과)
+})
+```
+
+<br>
+
+### 3️⃣ Promise chaining 
+- hello.txt GET 요청
+- 그게 완료되면 hello2.txt GET 요청
+- 그게 완료되면 hello2.txt 결과를 콘솔창에 출력
+
+<br>
+
+> 내 답안: 어려워요😭 ❗❗
+#### 선생님 답안
+- then을 여러개 붙여서 단계적으로 실행할 수 있음
+- 그냥 붙이면 안되고 then 함수는 new Promise()로 부터 생성된 오브젝트에만 붙일 수 있음
+- then을 붙일 수 있게 첫째 then에서 return new Promise() 이런걸 해주면 되지 않을까요?
+> return 해주면 그 자리에 new Promise()가 남아서 거기 뒤에 .then을 붙일 수 있음
+
+<br>
+
+```javascript
+var 프로미스 = new Promise(function(성공, 실패) {
+    $.get('https://codingapple1.github.io/hello.txt')
+    .done(function(결과1) {
+        성공(결과1);
+    })
+})
+
+프로미스.then(function(결과1){
+    console.log(결과1)
+
+    var 프로미스2 = new Promise(function(성공, 실패){
+        $.get('https://codingapple1.github.io/hello2.txt')
+        .done(function(결과2){
+            성공(결과2);
+        })
+    })
+
+    return 프로미스2;
+
+}).then(function(결과2){
+    console.log(결과2);
+})
+```
+
+#### 유의점
+- 💡성공하면 실행할 코드 안에서도 Promise를 생성할 수 있다는 것
+- 💡then을 이어붙이기 위해서 새로운 Promise를 retrun해주었다는 것
+
+<br>
+
+***
+
+<br>
+
+## level3_7: Promise 어려워서 싫으면 async/await을사용합시다
+- ES8(2018)에 나옴
+- 복잡한 Promise를 더 간단하게 쓰기 위한 async + await
+
+<br>
+
+### async 기본문법
+- async를 쓰면 함수 실행 후에 Promise 오브젝트가 남음 (그래서 then을 쓸 수 있음)
+- 성공 판정만 가능함
+```javascript
+async function 더하기(){
+    // 연산 결과를 출력하려면 return
+    return 1 + 1;
+
+    // 강제로 실패 내뱉기
+    // return Promise.reject('실패임')
+}
+
+더하기().then(function(결과){
+    console.log(결과) // 2
+})
+```
+
+<br>
+
+### async + await
+- async 안에서 쓰는 await (then 대신 사용)
+- 프로미스 해결될 떄 까지 기다렸다가 👉 `await 프로미스`
+- 연산 결과를 변수에 담아줌 👉 `var 결과`
+
+```javascript
+async function 더하기(){
+    var 프로미스 = new Promise(function(성공, 실패){
+        var 힘든연산 = 1 + 1;
+        성공();
+    })
+
+
+    // 프로미스 해결될 떄 까지 기다렸다가
+    // 연산 결과를 변수 선언에 담아줌
+    var 결과 = await 프로미스;
+    console.log(결과); // 2
+}
+```
+
+<br>
+
+### 실패 시 컨트롤 하는 try, catch
+- await은 프로미스 실패 시, 에러나고 멈춤
+- 실패 시 멈추지 않고, 실행 시킬 코드를 쓰기위해
+- `try { 이걸 해보고 에러나면 } catch { 이걸 실행해주세요 }`
+
+```javascript
+async function 더하기(){
+    var 프로미스 = new Promise(function(성공, 실패){
+        var 힘든연산 = 1 + 1;
+        실패();
+    })
+
+    try {
+        var 결과 = await 프로미스;
+        console.log(결과);
+    } catch {
+        console.log('프로미스 연산이 잘 안됐군요')
+    }
+}
+```
+
+<br>
+
+### 예시: 버튼 클릭 이 성공하면 성공 코드를 실행해주세요
+
+<br>
+
+#### Promise 버전
+```javascript
+var 버튼 = document.getElementById('btn');
+
+var 버튼프로미스 = new Promise(function(성공, 실패){
+    버튼.addEventListener('click', function(){
+        성공('성공했어요');
+    })
+})
+
+버튼프로미스.then(function(멘트){
+    console.log(멘트)
+})
+```
+
+<br>
+
+#### async + await 버전
+> async 함수를 마지막에 실행시켜줘야함❗
+
+```javascript
+async function 버튼함수() {
+    var 버튼프로미스 = new Promise(function(성공, 실패){
+        버튼.addEventListener('click', function(){
+            성공('성공했어요');
+        })
+    });
+
+    var 멘트 = await 버튼프로미스;
+    console.log(멘트)
+}
+버튼함수();
+```
+
+<br>
+
+***
+
+<br>
+
+## level3_8: for in / for of 반복문과 enumerable, iterable 속성
+
+<br>
+
+### 반복문의 종류
+- for 반복문
+- forEach 반복문 👉 `array 전용`
+- for in 👉 `object 전용`
+- for of 👉 `iterable 전용`
+
+<br>
+
+### 반복문 용도
+- ☝️ 코드 여러번 실행할 때
+- ✌️ arr, obj에서 자료 꺼내 쓸 때
+
+<br>
+
+### for in
+- 오브젝트 값을 하나씩 출력하기 위해
+- 오브젝트 자료 개수만큼 돈다
+- 반복문이 돌 때마다 '작명'에 key값을 저장해줌
+
+```javascript
+for (var 작명 in 오브젝트1) {
+    console.log(오브젝트1) // {name: 'Kim', age: 30} * 2
+    console.log(오브젝트1[작명]) // Kim, 30
+}
+```
+
+#### for in: enumerable(셀 수 있는 것) 한 것만 반복해줌
+- enumerable이 true인 것만 반복해줌
+- enumerable 판별하기 👉 `getOwnPropertyDescriptors`
+
+```javascript
+Object.getOwnPropertyDescriptors(오브젝트1, 'name');
+```
+
+<br>
+
+#### for in: 부모의 prototype도 반복해줌
+> 사실 부모 prototype까지 반복할 일이 별로 없음
+
+```javascript
+class 부모 {
+
+}
+// 부모에 유전자 생성
+부모.prototype.name = 'Park';
+
+var 오브젝트2 = new 부모();
+
+for (var 작명 in 오브젝트2) {
+    // 부모 유전자도 출력됨    
+    console.log(오브젝트2[작명]) // Park
+}
+```
+
+<br>
+
+#### for in: 내가 갖고 있는 값만 반복하려면❗
+- 내가 key를 직접 갖고 있냐를 검사해주는 함수 👉 `hasOwnProperty`
+
+```javascript
+class 부모 {
+
+}
+부모.prototype.name = 'Park';
+
+var 오브젝트2 = new 부모();
+
+for (var 작명 in 오브젝트2) {
+    // 내가 직접 갖고 있는 값인지 검사
+    if (오브젝트2.hasOwnProperty(작명)) {
+        console.log(오브젝트2[작명])
+    }
+}
+```
+
+<br>
+
+### for of
+- arr, 문자, arguments, NodeList, map, set...등에 사용 가능
+
+<br>
+
+#### for of 사용 예시
+```javascript
+// 어레이 자료 개수만큼 반복
+var 어레이 = [2, 3, 4, 5];
+
+// '자료'는 어레이의 자료 하나하나를 뜻함
+for (var 자료 of 어레이) {
+    console.log(자료) // 2, 3, 4, 5
+}
+```
+
+```javascript
+// 글자도 반복몬 돌릴 수 있음
+// 글자 분석도 가능
+for (var 자료 of 'APPLE') {
+    console.log(자료)
+}
+```
+<br>
+
+#### for of: iterable한 자료형에만 사용 가능
+- iterable한지 알 수 있는 함수 👉 `[Symbol.iterator]` 
+> Iterator가 붙으면 iterable한 자료
+
+<br>
+
+***
+
+<br>
+
+## level3_8: for in / for of 반복문과 enumerable, iterable 속성
