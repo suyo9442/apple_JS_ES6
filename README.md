@@ -2316,4 +2316,81 @@ for (var 자료 of 'APPLE') {
 
 <br>
 
-## level3_8: for in / for of 반복문과 enumerable, iterable 속성
+## level3_9: Symbol 자료형은 쓸모없어보이는데 왜 있는거죠
+- obj자료형의 비밀스런 key값
+- 비밀스런 데이터를 저장하고 싶을 때
+
+<br>
+
+### Symbol 만들기
+- ES6부터는 key값에 문자뿐만 아니라 symbol도 넣을 수 있음
+
+```javascript
+var person = { name: 'soo', age: 30 }
+
+// 공개적
+// person.몸무게 = 100;
+
+// 비공개적
+var weight = Symbol('시크릿 몸무게')
+var height = Symbol('시크릿 키')
+
+person[weight] = 200;
+person[height] = 160;
+console.log(person); //{..., Symbol(내 시크릿 몸무게임): 100}
+```
+
+<br
+
+### Symbol 만들기2
+```javascript
+var person = { name: 'soo', [height]: 160 }
+```
+
+<br>
+
+### 반복문을 돌려보면 symbol은 출력이 안됨
+- 반복문에서 출력되지 않는 건 enumerable 하지 않아서
+
+```javascript
+for ( var key in person ) {
+    console.log(person[key]) // soo, 30
+}
+```
+
+### 심볼 특징
+#### 1️⃣ 설명이 같다고 같은 symbol이 아님
+> 설명은 설명일 뿐
+
+```javascript
+var a = Symbol('설명');
+var b = Symbol('설명');
+a === b // false
+```
+
+<br>
+
+#### 2️⃣ 전역변수 같은 전역 symbol 만들기
+- 설명이 같은 symbol을 만들면 기존 심볼을 복붙해줌
+
+```javascript
+var c = Symbol.for('설명1')
+var d = Symbol.for('설명1')
+c === d // true
+```
+<br>
+
+#### 3️⃣ 기본 내장 symbol들
+- ex: Array에 내장된 기본 Symbol
+```javascript
+var 어레이 = [2, 3, 4]
+어레이[Symbol.iterator]
+```
+
+<br>
+
+***
+
+<br>
+
+## level3_9: Symbol 자료형은 쓸모없어보이는데 왜 있는거죠

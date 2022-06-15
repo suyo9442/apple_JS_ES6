@@ -17,123 +17,62 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-        var 오브젝트1 = {
-            name: 'Kim',
-            age: 30
-        };
+        
+        // 문법
+        var 심볼 = Symbol('심볼에 대한 설명');
 
-        // 오브젝트 값을 하나씩 출력하기 위해
-        // 오브젝트 자료 개수만큼 돈다
-        // 반복문이 돌 때마다 '작명'에 key값을 저장해줌
-        // 1 enumerable(셀 수 있는 것) 한 것만 반복해줌
-        // enumerable이 true인 것만 반복해줌
-        Object.getOwnPropertyDescriptors(오브젝트1, 'name');
+        // 어떻게 쓸까
+        // 용도: obj자료형의 비밀스런 key값
 
+        var person = { name: 'soo', age: 30 }
 
-        for (var 작명 in 오브젝트1) {
-            console.log(오브젝트1) // {name: 'Kim', age: 30} * 2
-            console.log(오브젝트1[작명]) // Kim, 30
+        // 비밀스런 데이터를 저장하고 싶으면?
+
+        // 공개적
+        // person.weight = 100;
+
+        // 비공개적
+        var weight = Symbol('내 시크릿 몸무게임')
+        var height = Symbol('내 시크릿 키임')
+
+        // ES6부터는 key값에 문자뿐만 아니라
+        // person.weight = 100;
+        
+        // symbol도 넣을 수 있음
+        person[weight] = 200;
+        person[height] = 160;
+        console.log(person); //{..., Symbol(내 시크릿 몸무게임): 100}
+
+        // 반복문을 돌려보면 symbol은 출력이 안됨
+        // 반복문에서 출력되지 않는 건 enumerable 하지 않아서
+        for ( var key in person ) {
+            console.log(person[key])
         }
 
-
-        // 2 부모의 prototype도 반복해줌
-        // 사실 부모 prototype까지 반복할 일이 별로 없음
-
-        // class 부모 {
-
-        // }
-        // 부모.prototype.name = 'Park';
-
-        // var 오브젝트2 = new 부모();
-
-        // for (var 작명 in 오브젝트2) {
-        //         console.log(오브젝트2[작명]) // Park
-        // }
+        // 심볼 만드는법 2
+        // var person = { name: 'soo', [height]: 160 }
 
 
-        class 부모 {
+        // 심볼 특징
+        // 1. 설명이 같다고 같은 symbol이 아님
+        // 설명은 설명일 뿐
+        var a = Symbol('설명');
+        var b = Symbol('설명');
+        a === b // false
 
-        }
-        부모.prototype.name = 'Park';
-
-        var 오브젝트2 = new 부모();
-
-        for (var 작명 in 오브젝트2) {
-            // 내가 직접 갖고 있는 값만 반복시키려면
-            // 내가 key를 직접 갖고 있냐를 검사해주는 함수
-
-            if (오브젝트2.hasOwnProperty(작명)) {
-                console.log(오브젝트2[작명]) // Park
-            }
-        }
-        // 3 obj 자료형에만 씀
+        // 2. 전역변수 같은 전역 symbol 만들기
+        // 설명이 같은 symbol을 만들면 기존 심볼을 복붙해줌
+        var c = Symbol.for('설명1')
+        var d = Symbol.for('설명1')
+        c === d // true
 
 
-
-        // for of
-        // arr, 문자, arguments, NodeList, map, set...등에 사용 가능
-
-        var 어레이 = [2, 3, 4, 5];
-
-        // 어레이 자료 개수만큼 반복
-        // '자료'는 어레이의 자료 하나하나를 뜻함
-        for (var 자료 of 어레이) {
-            console.log(자료)
-        }
-
-        // 글자도 반복몬 돌릴 수 있음
-        // 글자 분석도 가능
-        for (var 자료 of 'APPLE') {
-            console.log(자료)
-        }
-
-        // 1 iterable한 자료형에만 사용 가능
-        // iterable한지 알 수 있는 함수
-        어레이[Symbol.iterator](); // Array Iterator {}
-
-        // var 구구단 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        // console.log('--------------')
-        // for (var 자료 of 구구단) {
-        //     console.log(구구단[1] + ' X ' + 자료 + ' = ' + (구구단[1]*자료))
-        //     console.log(구구단[2] + ' X ' + 자료 + ' = ' + (구구단[1]*자료))
-        //     console.log(구구단[3] + ' X ' + 자료 + ' = ' + (구구단[1]*자료))
-        //     console.log(구구단[4] + ' X ' + 자료 + ' = ' + (구구단[1]*자료))
-        //     console.log(구구단[5] + ' X ' + 자료 + ' = ' + (구구단[1]*자료))
-        // }
+        // 3. 기본 내장 symbol들
+        // - Array에 내장된 기본 Symbol
+        var 어레이 = [2, 3, 4]
+        어레이[Symbol.iterator]
 
 
-        var products = [{
-                name1: 'chair',
-                price1: 7000,
-            },
-            {
-                name2: 'sofa',
-                price: 5000,
-            },
-            {
-                name1: 'desk',
-                price3: 9000,
-            },
-        ];
-
-        var 테스트 = {
-            name1: 'chair',
-            price1: 7000,
-        }
-
-        // if( isNaN(parseInt('name1')) )
-
-        console.log('name1'.slice(-1))
-
-        if( isNaN(parseInt('name1'.slice(-1))) == false ) {
-            let value = 테스트['name1'];
-            let key = 'name1'.slice(0, -1);
-            테스트[key] = value;
-
-            delete 테스트['name1']
-        }
-
-        console.log(테스트)
     </script>
 </body>
 
