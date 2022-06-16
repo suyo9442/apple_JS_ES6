@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+
+<!-- 자바스크립트 차단된 콘텐츠 자동 허용 실시 -->
+<!-- saved from url=(0013)about:internet -->
 
 <head>
     <meta charset="UTF-8">
@@ -9,65 +12,144 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <title>Document</title>
 </head>
-
+    <style>
+        canvas {
+            background: url('bg.jpg') no-repeat;
+            background-size: cover;
+            width: 700px;
+            height: 500px;
+        }
+    </style>
 <body>
-    <div id="mordor"></div>
 
-    <custom-input name="비번"></custom-input>
-
-    <template id="template1">
-        <label>이메일을 입력하세여</label><input>
-        <style> label { color: red } </style>
-    </template>
-
-    <input type="range">
+    <canvas id="canvas">
+    </canvas>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-        // shadowDom: HTML태그를 몰래 숨겨두는 기능
-        // shadowDom 만드는 법
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
 
-        // 1. div박스에 shadowRoot 열어주기
-        document.querySelector('#mordor').attachShadow({
-            mode: 'open'
-        })
-        // > shadowRoot: HTML태그 숨겨주는 곳
-
-        // 2. shadowRoot에 태그 만들기
-        document.querySelector('#mordor').shadowRoot.innerHTML = `<p>심연에서 왔도다</p>`
+        canvas.width = window.innerWidth - 100;
+        canvas.height = window.innerHeight - 100;
 
 
+        // 캐릭터, 장애물 이미지 바꾸기
+        // 이미지 오브젝트 생성
+        var img1 = new Image();
+        img1.src = 'jun.png'
 
-        // Web Components + shadowDom을 하면 완벽한 HTML 모듈화를 할 수 있음
+        var img2 = new Image();
+        img2.src = 'burger.png'
 
 
-        class 클래스 extends HTMLElement {
-            connectedCallback() {
-                // style 주는 방법?
-                this.innerHTML = `
-                <label>이메일 입력하세요</label><input>
-                <style></style>`
-                // 문제? 다른 label태그도 오염됨! => shadowDom을 쓰자
-                // shadowDom에 넣으면 외부에 영향X
-
-                // shadowDom으로 style주기
-                this.attachShadow({mode: 'open'})
-                this.shadowRoot.innerHTML = `<label>이메일 입력하세요</label><input>
-                <style> label {color: red} </style>`
-                // 다른 label태그도 오염X
-                
-                // 근데 이런식으로 짜려면 더러우니까, 실무에서는...
-                // HTML 임시 보관함을 사용함 => template
-                this.shadowRoot.append(template1.content.cloneNode(true))
-
-                // 이벤트리스너 달려면?
-                var el = this.shadowRoot.querySelector('label');
-                el.addEventListener('click', function(){ });
-
+        var dino = {
+            x: 60,
+            y: 380,
+            width: 130,
+            height: 300,
+            draw() {
+                ctx.fillStyle = 'green';
+                // ctx.fillRect(this.x, this.y, this.width, this.height)
+                ctx.drawImage(img1, this.x, this.y, this.width, this.height)
             }
         }
 
-        customElements.define('custom-input', 클래스)
+
+        class Cactus {
+            constructor() {
+                this.x = 500;
+                this.y = 610;
+                this.width = 70;
+                this.height = 70;
+            }
+            draw() {
+                ctx.fillStyle = 'blue';
+                // ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.drawImage(img2, this.x, this.y, this.width, this.height)
+            }
+        }
+
+        var timer = 0;
+        var cactus여러개 = [];
+        var 점프timer = 0;
+
+        function 프레임마다실행() {
+            animation = requestAnimationFrame(프레임마다실행)
+            timer++;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            if (timer % 120 === 0) {
+                var cactus = new Cactus();
+                cactus여러개.push(cactus);
+            }
+
+            cactus여러개.forEach((a, i, o) => {
+
+                // x좌표가 0미만 이면 Arr에서 장애물 제거
+                if (a.x < 0) {
+                    o.splice(i, 1)
+                }
+
+                a.x -= 6;
+
+                // 주인공 vs 모든 장애물 충돌체크 해야하니까 반복문에
+                충돌하냐(dino, a)
+                a.draw();
+            })
+
+            // 스페이스바 누르면 점프
+            if (점프중 == true) {
+                dino.y -= 10;
+                점프timer++;
+            }
+
+            // 점프중이 아니면
+            if (점프중 == false) {
+                // 최저 높이(y)를 정해두고, 그 이상으로 금지
+                if (dino.y < 380) {
+                    dino.y += 10;
+                }
+            }
+
+            // ~프레임 지나면 점프 그만
+            if (점프timer > 25) {
+                점프중 = false;
+
+                // 스페이스바 여러번 작동되도록 타이머를 리셋
+                점프timer = 0;
+            }
+
+            dino.draw();
+        }
+        프레임마다실행();
+
+        var 점프중 = false;
+        document.addEventListener('keydown', function (e) {
+            if (e.code === 'Space') {
+                점프중 = true;
+            }
+        })
+
+
+        // 충돌감지법?
+        // x: 캐릭터의 오른쪽 좌표 - 장애물의 왼쪽 좌표 = 충돌 
+        // y: 캐릭터의 하단 좌표 - 장애물의 상단 좌표 = 충돌
+        // (0보다 작아지면 충돌)
+
+        // 충돌확인
+        function 충돌하냐(dino, cactus) {
+            var x축차이 = cactus.x - (dino.x + dino.width);
+            var y축차이 = cactus.y - (dino.y + dino.height);
+
+            if ( x축차이 < -30 && y축차이 < -30 ) {
+                // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 애니메이션 중지
+                cancelAnimationFrame(animation);
+            }
+        }
     </script>
 </body>
 
