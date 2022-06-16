@@ -11,56 +11,63 @@
 </head>
 
 <body>
-    <!-- <커스텀태그> 안에서도 파라미터 사용 가능 -->
-    <!-- attribute를 파라미터처럼 사용 가능 -->
-    <custom-input name="비번"></custom-input>
-    <custom-input name="아이디"></custom-input>
+    <div id="mordor"></div>
 
+    <custom-input name="비번"></custom-input>
+
+    <template id="template1">
+        <label>이메일을 입력하세여</label><input>
+        <style> label { color: red } </style>
+    </template>
+
+    <input type="range">
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-        // 반복되는 HTML 태그를 축약하기 위해
-        // Web Components 브라우저 기본 기능 사용
-        // customElements.define('작명', 클래스형태의 HTML);
+        // shadowDom: HTML태그를 몰래 숨겨두는 기능
+        // shadowDom 만드는 법
 
-        // 장점 중복제거, 코드 재활용 가능
+        // 1. div박스에 shadowRoot 열어주기
+        document.querySelector('#mordor').attachShadow({
+            mode: 'open'
+        })
+        // > shadowRoot: HTML태그 숨겨주는 곳
+
+        // 2. shadowRoot에 태그 만들기
+        document.querySelector('#mordor').shadowRoot.innerHTML = `<p>심연에서 왔도다</p>`
+
+
+
+        // Web Components + shadowDom을 하면 완벽한 HTML 모듈화를 할 수 있음
+
 
         class 클래스 extends HTMLElement {
             connectedCallback() {
-                // 내가 만든 태그가 HTML에 입력되면 실행할 코드
+                // style 주는 방법?
+                this.innerHTML = `
+                <label>이메일 입력하세요</label><input>
+                <style></style>`
+                // 문제? 다른 label태그도 오염됨! => shadowDom을 쓰자
+                // shadowDom에 넣으면 외부에 영향X
 
-                // attribute를 파라미터처럼 사용 가능
-                let name = this.getAttribute('name')
-
-                // 방법1
-                // 여기서 this는 커스텀태그 요소
-                this.innerHTML = `<label>${name} 인풋 이에요</label><input>`
-
-                // 방법2
-                let 요소 = document.createElement('label');
-                this.appendChild(요소);
-
+                // shadowDom으로 style주기
+                this.attachShadow({mode: 'open'})
+                this.shadowRoot.innerHTML = `<label>이메일 입력하세요</label><input>
+                <style> label {color: red} </style>`
+                // 다른 label태그도 오염X
                 
-                
-            }
-            // attribute가 변경될 때 마다 뭔가 실행되려면
-            static get observedAttributes() {
-                // name이라는 att가 변경될 때마다
-                return ['name']
-            }
-            attributeChangedCallback() {
-                // 이 코드를 실행해주세요~
-                console.log(this.getAttribute('name'))
+                // 근데 이런식으로 짜려면 더러우니까, 실무에서는...
+                // HTML 임시 보관함을 사용함 => template
+                this.shadowRoot.append(template1.content.cloneNode(true))
 
-                // HTML 재렌더링
-                this.innerHTML = `<label>${name} 인풋 이에요</label><input>`
+                // 이벤트리스너 달려면?
+                var el = this.shadowRoot.querySelector('label');
+                el.addEventListener('click', function(){ });
+
             }
         }
 
-        customElements.define('custom-input', 클래스);
-
-        // Web Components 라이브러리
-        // Lit, Stencil 등
+        customElements.define('custom-input', 클래스)
     </script>
 </body>
 

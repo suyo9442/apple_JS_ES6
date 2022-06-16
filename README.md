@@ -2592,3 +2592,108 @@ class 클래스 extends HTMLElement {
 }
 ```
 > Web Components 라이브러리: Lit, Stencil 등
+
+<br>
+
+***
+
+<br>
+
+## level3_12: shadow DOM과 template으로 HTML 모듈화하기
+
+<br>
+
+### shadowDom이란
+- shadowDom: HTML태그를 몰래 숨겨두는 기능
+<img src="shadowDom.png" width="400px">
+<img src="shadowDom2.png" width="400px">
+
+<br>
+
+### shadowDom 만드는 법
+1. HTML태그 생성
+```html
+<div id="mordor"></div>
+```
+
+<br>
+
+2. div박스에 shadowRoot 열어주기
+- `attachShadow`
+> shadowRoot: HTML태그 숨겨주는 곳
+```javascript
+document.querySelector('#mordor').attachShadow({
+    mode: 'open'
+})
+```
+
+<br>
+
+3. shadowRoot안에 숨길 태그 생성
+- `shadowRoot`
+
+```javascript
+document.querySelector('#mordor').shadowRoot.innerHTML = `<p>심연에서 왔도다</p>`
+```
+
+<br>
+
+### Web Components + shadowDom로 완벽한 HTML 모듈화하기
+
+<br>
+
+#### Web Components에 스타일을 주게되면..
+- **문제?** 다른 label태그도 오염됨! 👉 `shadowDom`을 쓰자
+- shadowDom에 넣으면 외부에 영향❌
+
+```javascript
+class 클래스 extends HTMLElement {
+    connectedCallback() {
+        // Web Components에 style
+        this.innerHTML = `
+        <label>이메일 입력하세요</label><input>
+        <style></style>`
+
+
+        // shadowDom으로 style
+        this.attachShadow({mode: 'open'})
+        this.shadowRoot.innerHTML = `<label>이메일 입력하세요</label><input>
+        <style> label {color: red} </style>`
+    }
+}
+```
+
+<br>
+
+#### 실무에서는...
+- 위와 같이 짜면 더러움 👉 `template`을 쓰자
+> template: HTML 임시 보관함
+
+<br>
+
+1. template 만들고, 스타일주기
+
+```html
+<template id="template1">
+    <label>이메일을 입력하세여</label><input>
+    <style> label { color: red } </style>
+</template>
+```
+
+<br>
+
+2. Web Components안에 template 생성하기
+```javascript
+class 클래스 extends HTMLElement {
+    connectedCallback() {
+        
+        this.shadowRoot.append(template1.content.cloneNode(true))
+
+        // 이벤트리스너 달려면?
+        var el = this.shadowRoot.querySelector('label');
+        el.addEventListener('click', function(){ });
+
+    }
+}
+```
+
