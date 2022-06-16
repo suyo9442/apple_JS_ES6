@@ -2394,3 +2394,103 @@ var 어레이 = [2, 3, 4]
 <br>
 
 ## level3_10: 매우 짧게 알아보는 Map, Set 자료형
+### Map
+- Obj랑 비슷, key & value 함께 저장
+- 자료의 연관성을 표현하기 위해 사용
+- 차이점? 
+    - 표현방식이 다름 `{'name'=> 'Kim'}`
+    - Obj는 key에 글자만 가능, Map은 다 가능
+
+<br>
+
+#### Map 자료 만들기
+- 자료 하나씩 넣기
+```javascript
+var person = new Map();
+person.set('name', 'Kim'); // name => Kim
+person.set('age', '20'); // name => Kim
+
+//// Map은 key에 모두 가능
+person.set('100', 'Kim'); // 숫자가능
+person.set([1, 2, 3], 'Kim'); // Arr가능
+```
+
+<br>
+
+- 자료 여러개 넣기
+> 대괄호 사용
+
+```javascript
+var person2 = new Map([
+    person.set('100', 'Kim'),
+    person.set([1, 2, 3], 'Kim')
+])
+```
+
+<br>
+
+#### Map 자료 다루기
+```javascript
+// Map 자료 꺼내는 법
+person.get('age')
+
+// Map 자료 삭제
+person.delete('age')
+
+// Map 자료 갯수 세기
+person.size
+
+// Map에 반복문 돌리기
+for(var key of person.keys()) {
+    console.log(key)
+}
+```
+
+<br>
+
+### Set
+- 중복자료를 허용하지 않는 Arr
+
+<br>
+
+#### Set 자료 만들기
+```javascript
+var 출석부2 = new Set(['john', 'tom', 'tom', 'andy']);
+출석부2 
+
+// {'john', 'tom', 'andy'}
+// 중복자료를 제거해줌
+```
+
+<br>
+
+#### Set 자료 다루기
+```javascript
+// set에 자료 추가
+출석부2.add('sally');
+
+// set 자료 제거
+출석부2.delete('sally');
+
+// 자료 있는지 확인 (true & false)
+출석부2.has('sally');
+
+// 자료 개수 확인
+출석부2.size //3
+```
+
+<br>
+
+#### 일반 Arr => Set으로 변환하기
+```javascript
+// 일반 Arr
+var 출석부 = ['john', 'tom', 'tom', 'andy'];
+
+// Set으로 변환
+var 출석부3 = new Set(['john', 'tom', 'tom', 'andy']);
+
+
+// {'john', 'tom', 'andy'} 중괄호로 감싸져있음
+// 다시 Arr로 만들고 싶으면
+출석부 = [...출석부3]
+```

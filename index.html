@@ -17,60 +17,83 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-        
-        // 문법
-        var 심볼 = Symbol('심볼에 대한 설명');
+        // Map
+        // Obj랑 비슷, key & value 함께 저장
 
-        // 어떻게 쓸까
-        // 용도: obj자료형의 비밀스런 key값
+        // Map 만들기
+        var person = new Map();
+        person.set('name', 'Kim'); // name: Kim
+        person.set('age', '20'); // name: Kim
 
-        var person = { name: 'soo', age: 30 }
+        // 표현하는 방식이 다름 {'name' => 'Kim', 'age' => '20'}
 
-        // 비밀스런 데이터를 저장하고 싶으면?
+        // 자료의 연관성을 표현하기 위해 사용
+        // name은 Kim과 연결되어있고~
+        // obj는 key로 글자만 가능, Map은 다 가능
+        person.set('100', 'Kim'); // 숫자가능
+        person.set([1, 2, 3], 'Kim'); // arr가능
 
-        // 공개적
-        // person.weight = 100;
+        // Map 자료 꺼내는 법
+        person.get('age')
 
-        // 비공개적
-        var weight = Symbol('내 시크릿 몸무게임')
-        var height = Symbol('내 시크릿 키임')
+        // Map 자료 삭제
+        person.delete('age')
 
-        // ES6부터는 key값에 문자뿐만 아니라
-        // person.weight = 100;
-        
-        // symbol도 넣을 수 있음
-        person[weight] = 200;
-        person[height] = 160;
-        console.log(person); //{..., Symbol(내 시크릿 몸무게임): 100}
+        // Map 자료 갯수 세기
+        person.size
 
-        // 반복문을 돌려보면 symbol은 출력이 안됨
-        // 반복문에서 출력되지 않는 건 enumerable 하지 않아서
-        for ( var key in person ) {
-            console.log(person[key])
+        // 수학의 연산 매핑,,ㅅ쓸 때 가끔 사용
+
+        // Map의 키 갯수 만큼 반복문 돌리기
+        for (var key of person.keys()) {
+            console.log(key)
         }
 
-        // 심볼 만드는법 2
-        // var person = { name: 'soo', [height]: 160 }
+
+        // Map 자료 한꺼번에 넣기
+        var person2 = new Map([
+            person.set('100', 'Kim'), // 숫자가능
+            person.set([1, 2, 3], 'Kim') // arr가능
+        ]);
 
 
-        // 심볼 특징
-        // 1. 설명이 같다고 같은 symbol이 아님
-        // 설명은 설명일 뿐
-        var a = Symbol('설명');
-        var b = Symbol('설명');
-        a === b // false
-
-        // 2. 전역변수 같은 전역 symbol 만들기
-        // 설명이 같은 symbol을 만들면 기존 심볼을 복붙해줌
-        var c = Symbol.for('설명1')
-        var d = Symbol.for('설명1')
-        c === d // true
 
 
-        // 3. 기본 내장 symbol들
-        // - Array에 내장된 기본 Symbol
-        var 어레이 = [2, 3, 4]
-        어레이[Symbol.iterator]
+        // Set자료형
+        // arr랑 유사
+        var 출석부 = ['john', 'tom', 'tom', 'andy'];
+        
+        // 잘못해서 tom을 두 번 저장
+        // 중복자료를 허용하지 않는 arr
+
+        var 출석부2 = new Set(['john', 'tom', 'tom', 'andy']);
+        출석부2 // {'john', 'tom', 'andy'}
+        // 중복이 있으면 중복 제거
+
+
+        // set에 자료 추가
+        출석부2.add('sally');
+
+        // set 자료 제거
+        출석부2.delete('sally');
+
+        // 자료 있는지 확인 (true & false)
+        출석부2.has('sally');
+
+        // 자료 개수 확인
+        출석부2.size //3
+
+        // 일반 Arr => Set으로 변환은?
+        var 출석부 = ['john', 'tom', 'tom', 'andy'];
+        var 출석부3 = new Set(['john', 'tom', 'tom', 'andy']);
+        // {'john', 'tom', 'andy'} 중괄호로 감싸져있음
+        // 다시 Arr로 만들고 싶으면
+        출석부 = [...출석부3]
+
+
+        // Set 반복문 돌리기
+
+
 
 
     </script>
