@@ -11,91 +11,56 @@
 </head>
 
 <body>
+    <!-- <커스텀태그> 안에서도 파라미터 사용 가능 -->
+    <!-- attribute를 파라미터처럼 사용 가능 -->
+    <custom-input name="비번"></custom-input>
+    <custom-input name="아이디"></custom-input>
 
-    <img id="test" src="https://codingapple1.github.io/kona.jpg">
-    <button id="btn">성공??</button>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-        // Map
-        // Obj랑 비슷, key & value 함께 저장
+        // 반복되는 HTML 태그를 축약하기 위해
+        // Web Components 브라우저 기본 기능 사용
+        // customElements.define('작명', 클래스형태의 HTML);
 
-        // Map 만들기
-        var person = new Map();
-        person.set('name', 'Kim'); // name: Kim
-        person.set('age', '20'); // name: Kim
+        // 장점 중복제거, 코드 재활용 가능
 
-        // 표현하는 방식이 다름 {'name' => 'Kim', 'age' => '20'}
+        class 클래스 extends HTMLElement {
+            connectedCallback() {
+                // 내가 만든 태그가 HTML에 입력되면 실행할 코드
 
-        // 자료의 연관성을 표현하기 위해 사용
-        // name은 Kim과 연결되어있고~
-        // obj는 key로 글자만 가능, Map은 다 가능
-        person.set('100', 'Kim'); // 숫자가능
-        person.set([1, 2, 3], 'Kim'); // arr가능
+                // attribute를 파라미터처럼 사용 가능
+                let name = this.getAttribute('name')
 
-        // Map 자료 꺼내는 법
-        person.get('age')
+                // 방법1
+                // 여기서 this는 커스텀태그 요소
+                this.innerHTML = `<label>${name} 인풋 이에요</label><input>`
 
-        // Map 자료 삭제
-        person.delete('age')
+                // 방법2
+                let 요소 = document.createElement('label');
+                this.appendChild(요소);
 
-        // Map 자료 갯수 세기
-        person.size
+                
+                
+            }
+            // attribute가 변경될 때 마다 뭔가 실행되려면
+            static get observedAttributes() {
+                // name이라는 att가 변경될 때마다
+                return ['name']
+            }
+            attributeChangedCallback() {
+                // 이 코드를 실행해주세요~
+                console.log(this.getAttribute('name'))
 
-        // 수학의 연산 매핑,,ㅅ쓸 때 가끔 사용
-
-        // Map의 키 갯수 만큼 반복문 돌리기
-        for (var key of person.keys()) {
-            console.log(key)
+                // HTML 재렌더링
+                this.innerHTML = `<label>${name} 인풋 이에요</label><input>`
+            }
         }
 
+        customElements.define('custom-input', 클래스);
 
-        // Map 자료 한꺼번에 넣기
-        var person2 = new Map([
-            person.set('100', 'Kim'), // 숫자가능
-            person.set([1, 2, 3], 'Kim') // arr가능
-        ]);
-
-
-
-
-        // Set자료형
-        // arr랑 유사
-        var 출석부 = ['john', 'tom', 'tom', 'andy'];
-        
-        // 잘못해서 tom을 두 번 저장
-        // 중복자료를 허용하지 않는 arr
-
-        var 출석부2 = new Set(['john', 'tom', 'tom', 'andy']);
-        출석부2 // {'john', 'tom', 'andy'}
-        // 중복이 있으면 중복 제거
-
-
-        // set에 자료 추가
-        출석부2.add('sally');
-
-        // set 자료 제거
-        출석부2.delete('sally');
-
-        // 자료 있는지 확인 (true & false)
-        출석부2.has('sally');
-
-        // 자료 개수 확인
-        출석부2.size //3
-
-        // 일반 Arr => Set으로 변환은?
-        var 출석부 = ['john', 'tom', 'tom', 'andy'];
-        var 출석부3 = new Set(['john', 'tom', 'tom', 'andy']);
-        // {'john', 'tom', 'andy'} 중괄호로 감싸져있음
-        // 다시 Arr로 만들고 싶으면
-        출석부 = [...출석부3]
-
-
-        // Set 반복문 돌리기
-
-
-
-
+        // Web Components 라이브러리
+        // Lit, Stencil 등
     </script>
 </body>
 

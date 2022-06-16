@@ -2398,7 +2398,7 @@ var 어레이 = [2, 3, 4]
 - Obj랑 비슷, key & value 함께 저장
 - 자료의 연관성을 표현하기 위해 사용
 - 차이점? 
-    - 표현방식이 다름 `{'name'=> 'Kim'}`
+    - 표현방식이 다름 👉 `{'name'=> 'Kim'}`
     - Obj는 key에 글자만 가능, Map은 다 가능
 
 <br>
@@ -2494,3 +2494,101 @@ var 출석부3 = new Set(['john', 'tom', 'tom', 'andy']);
 // 다시 Arr로 만들고 싶으면
 출석부 = [...출석부3]
 ```
+
+<br>
+
+***
+
+<br>
+
+## level3_11: Web Components : 커스텀 HTML 태그 만들기
+- 반복되는 HTML 태그를 축약하기 위해 사용
+- 브라우저 기본 기능임
+- 장점? 중복제거, 코드 재활용 가능
+
+<br>
+
+### Web Components 만들기
+1. customElements.define
+- `customElements.define('태그작명', 클래스형태의 HTML)`
+
+```javascript
+customElements.define('custom-input', 클래스)
+```
+
+<br>
+
+2. 클래스형태의 HTML 만들기
+> 여기서 **this**는 커스텀태그를 뜻함
+
+```javascript
+class 클래스 extends HTMLElement {
+    connectedCallback() {
+        // 커스텀태그가 HTML에 입력되면 실행할 코드
+
+        // 방법1
+        this.innerHTML = `<label>${name} 인풋 이에요</label><input>`
+        
+        // 방법2
+        let 요소 = document.createElement('label');
+        this.appendChild(요소)
+    }
+}
+
+customElements.define('custom-input', 클래스)
+```
+
+<br>
+
+### <커스텀태그> 안에서도 파라미터 사용 가능
+- attribute를 파라미터처럼 사용 가능
+
+<br>
+
+1. attribute 생성
+```javascript
+<custom-input name="비번"></custom-input>
+<custom-input name="아이디"></custom-input>
+```
+
+<br>
+
+2. attribute 사용하기
+- 변수로 사용하기
+
+```javascript
+class 클래스 extends HTMLElement {
+    connectedCallback() {
+        
+        // att 가져오기
+        let name = this.getAttribute('name');
+
+        // 가져온 att 사용
+        this.innerHTML = `<label>${name} 인풋 이에요</label><input>`;
+
+    }
+}
+```
+
+<br>
+
+- attribute가 변경될 때 마다 뭔가 실행되려면
+```javascript
+class 클래스 extends HTMLElement {
+    connectedCallback() {
+        // 커스텀태그 실행 코드
+    }
+    static get observedAttributes() {
+        // name이라는 att가 변경될 때마다
+        retun ['name']
+    }
+    attributeChangeCallback() {
+        // 이 코드를 실행해주세요~
+        console.log(this.getAttribute('name'))
+
+        // HTML 재렌더링 할 수도 있음
+        this.innerHTML = `<label>${name} 인풋 이에요</label><input>`
+    }
+}
+```
+> Web Components 라이브러리: Lit, Stencil 등
